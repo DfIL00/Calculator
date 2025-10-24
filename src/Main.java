@@ -1,0 +1,83 @@
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Калькулятор готов к работе!");
+        System.out.println("Введите выражение (например: 5 + 3):");
+
+        while (true) {
+            System.out.print("Input: ");
+            String input = scanner.nextLine();
+
+
+            if (input.equalsIgnoreCase("exit")) {
+                System.out.println("Выход из калькулятора.");
+                break;
+            }
+
+
+            if (input.trim().isEmpty()) {
+                continue;
+            }
+
+            try {
+                String result = calc(input);
+                System.out.println("Output: " + result);
+            } catch (Exception e) {
+                System.out.println("Output: throws Exception");
+            }
+
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+
+    public static String calc(String input) {
+        String[] parts = input.split(" ");
+
+
+        if (parts.length != 3) {
+            throw new IllegalArgumentException("Неверный формат ввода");
+        }
+
+        int a, b;
+        try {
+            a = Integer.parseInt(parts[0]);
+            b = Integer.parseInt(parts[2]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Числа должны быть целыми");
+        }
+
+
+        if (a < 1 || a > 10 || b < 1 || b > 10) {
+            throw new IllegalArgumentException("Числа должны быть от 1 до 10 включительно");
+        }
+
+        String operator = parts[1];
+        int result;
+        switch (operator) {
+            case "+":
+                result = a + b;
+                break;
+            case "-":
+                result = a - b;
+                break;
+            case "*":
+                result = a * b;
+                break;
+            case "/":
+                if (b == 0) {
+                    throw new IllegalArgumentException("Деление на ноль");
+                }
+                result = a / b;
+                break;
+            default:
+                throw new IllegalArgumentException("Неподдерживаемая операция: " + operator);
+        }
+
+        return String.valueOf(result);
+    }
+}
